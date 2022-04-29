@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardImg, CardText, CardBody,
     CardTitle, CardSubtitle} from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 
   function ActiveRender({achievement}) {
@@ -35,28 +36,75 @@ import { Link } from 'react-router-dom';
         return NotActiveRender(achievement = {achievement});
       }
   }
-  const Result = (props) => {
 
-    const results = props.achievements.map((achievement) => {
+  function RenderStats ({stat}) {
+    return(
+      <div className="row achivement-content">
+          <div className="col-12 col-md-2 m-1">
+              <Card className="card border-0">
+                  <CardImg width="100%" src={stat.image} />
+              </Card>
+          </div>
+          <div className="col-12 col-md-9 m-1">
+            <div>
+              <h4>{stat.name}: {stat.value} </h4>
+            </div>
+          </div>
+      </div>
+
+    );
+  }
+  
+
+  class Result extends Component  {
+
+    constructor(props) {
+      super(props);
+    }
+
+    render() {
+    const results = this.props.achievements.map((achievement) => {
         return (
             <div className="col-12 col-md-5 m-1">
-                <RenderAchievement achievement={achievement} isAchieved={props.isAchieved} address = {props.choosenAddress}/>
+                <RenderAchievement achievement={achievement} isAchieved={this.props.isAchieved} address = {this.props.choosenAddress}/>
             </div>
         );
     });
 
+    const stats = this.props.stats.map((stat) => {
+      return (
+              <RenderStats stat={stat}/>
+      );
+    });
+    
     return (
+     
       <div className="container">
           <div className="row-content">
             <div class="d-flex justify-content-center">
-                <h3>{props.choosenAddress} achievements:</h3>
+                <h1>Profile</h1>
             </div>                
           </div>
           <div className="row">
               {results}
           </div>
+          <div className="row-content">
+            <div class="d-flex justify-content-center">
+                  <h2>Stats of</h2>
+            </div>
+            <div class="d-flex justify-content-center">
+                  <h2>{this.props.choosenAddress}</h2>
+            </div>
+          </div>
+          <div className="achivement-content">
+            <div class="d-flex justify-content-center">
+                  <h1>Security level = 87%</h1>
+            </div>
+          </div>
+          <div>{stats}</div>
       </div>
     );
+    }
   }
 
 export default Result;
